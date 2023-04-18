@@ -1,11 +1,14 @@
 import { alchemy } from '@/config/alchemy/index'
+import { Block, BlockWithTransactions } from 'alchemy-sdk'
 import { useCallback, useEffect, useState } from 'react'
 
 const BLOCKS_PER_PAGE = 5
 
 export default function useAlchemy() {
   const [latestBlock, setLatestBlock] = useState<number>(-1)
-  const [blocks20, setBlocks20] = useState([])
+  const [latestBlockData, setLatestBlockData] =
+    useState<BlockWithTransactions | null>(null)
+  const [blocks20, setBlocks20] = useState<Block[]>([])
   const [actualPage, setActualPage] = useState<number>(1)
   const getLatestBlock = useCallback(async () => {
     const toSet = await alchemy.core.getBlockNumber()
@@ -31,6 +34,11 @@ export default function useAlchemy() {
           .map((blockNumber) => getBlockById(blockNumber))
 
         const toSet = await Promise.all(temporalArray)
+        if (toSet.length > 0) {
+          alchemy.core
+            .getBlockWithTransactions(toSet[0].hash)
+            .then((response) => setLatestBlockData(response))
+        }
         setBlocks20(toSet)
       } catch (e) {
         console.log(e)
@@ -42,12 +50,15 @@ export default function useAlchemy() {
     getLatestBlock()
   }, [getLatestBlock])
 
+  useEffect(() => {
+    getBlocks20(latestBlock)
+  }, [getBlocks20, latestBlock])
+
   return {
     latestBlock,
-    getBlocks20,
-    getBlockById,
     blocks20,
     nextPage,
-    previousPage
+    previousPage,
+    latestBlockData
   }
 }
