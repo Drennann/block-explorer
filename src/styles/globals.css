@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-card: #080c14;
+  --border-card: rgba(100, 116, 139, 0.2);
+}
+
 * {
   margin: 0;
   padding: 0;

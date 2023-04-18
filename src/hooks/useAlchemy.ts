@@ -46,6 +46,11 @@ export default function useAlchemy() {
     },
     [getBlockById, actualPage]
   )
+
+  const getTransactionsById = useCallback(async (id: string) => {
+    return alchemy.core.getTransaction(id)
+  }, [])
+
   useEffect(() => {
     getLatestBlock()
   }, [getLatestBlock])
@@ -59,6 +64,7 @@ export default function useAlchemy() {
     blocks20,
     nextPage,
     previousPage,
-    latestBlockData
+    latestBlockData,
+    getTransactionsById
   }
 }

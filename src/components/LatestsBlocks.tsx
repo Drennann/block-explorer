@@ -23,7 +23,7 @@ export default function LatestBlocks() {
           </li>
         ))}
         <li className='border-t border-[rgba(100,116,139,.2)] h-12 flex justify-center items-center cursor-pointer'>
-          <p>VIEW ALL TRANSACTIONS</p>
+          <p>VIEW ALL BLOCKS</p>
         </li>
       </ul>
     </div>
